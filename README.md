@@ -35,53 +35,17 @@ This system simulates an automated quality control process for chocolate manufac
 | **Polymorphism** | Different `evaluate_quality()` implementations for each chocolate type |
 | **Abstraction** | `QualitySensor` abstract class with concrete `VisualSensor` implementation |
 
-## 📊 Class Diagram
 
-```mermaid
-classDiagram
-    class Chocolate {
-        -_batch_id: str
-        -_production_date: datetime
-        -_defects: List[DefectType]
-        -_quality_status: QualityStatus
-        +batch_id: str
-        +defects: List[DefectType]
-        +add_defect(defect): None
-        +evaluate_quality(): QualityStatus
-    }
-    
-    class MoldedChocolate {
-        -_mold_type: str
-        +evaluate_quality(): QualityStatus
-    }
-    
-    class PackagedChocolate {
-        -_packaging_type: str
-        +evaluate_quality(): QualityStatus
-    }
-    
-    class QualitySensor {
-        <<abstract>>
-        +detect_defects(chocolate): List[DefectType]
-    }
-    
-    class VisualSensor {
-        -_analyze_molding(): List[DefectType]
-        -_analyze_packaging(): List[DefectType]
-        +detect_defects(chocolate): List[DefectType]
-    }
-    
-    class QualityControlSystem {
-        -_sensors: Dict[str, QualitySensor]
-        -_results: List[Dict]
-        +register_sensor(process, sensor): None
-        +inspect_chocolate(chocolate, process): QualityStatus
-        +generate_report(): str
-        +show_inspections(): str
-    }
-    
-    Chocolate <|-- MoldedChocolate
-    Chocolate <|-- PackagedChocolate
-    QualitySensor <|-- VisualSensor
-    QualityControlSystem --> QualitySensor
-    QualityControlSystem --> Chocolate# QualitySysteminPOO
+
+# Create the quality control system
+system = QualityControlSystem()
+
+# Register sensors
+visual_sensor = VisualSensor()
+system.register_sensor("molding", visual_sensor)
+system.register_sensor("packaging", visual_sensor)
+
+# Inspect a molded chocolate
+chocolate = MoldedChocolate("BATCH-001", datetime.now(), "heart")
+result = system.inspect_chocolate(chocolate, "molding")
+print(f"Quality Result: {result.value}")
